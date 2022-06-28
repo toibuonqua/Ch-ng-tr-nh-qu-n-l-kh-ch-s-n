@@ -22,7 +22,7 @@ class CustomerService(Sqlservice):
         elif nhap == "2":
             return self.update_info_customer()
         elif nhap == "3":
-            return self.manager_customer()
+            return self.delete_customer()
         elif nhap == "4":
             self.showtable()
             return self.manager_customer()
@@ -34,7 +34,7 @@ class CustomerService(Sqlservice):
     def update_info_customer(self):
         print("Cập nhập thông tin khách hàng".center(40, "="))
         self.showtable()
-        id_cccd = input("Nhập CCCD khách hàng: ")
+        id_cccd = input("Nhập CCCD khách hàng (Tối đa 12 số): ")
         check_id = self.check_id(id_cccd)
         if check_id is None:
             errorsys.customer_invalid()
@@ -50,6 +50,17 @@ class CustomerService(Sqlservice):
             })
             return self.manager_customer()
 
+    def delete_customer(self):
+        print("Xóa thông tin khách hàng".center(40, "="))
+        self.showtable()
+        id_cccd = input("Nhập CCCD khách hàng (Tối đa 12 số): ")
+        check_id = self.check_id(id_cccd)
+        if check_id is None:
+            errorsys.customer_invalid()
+            return self.manager_customer()
+        else:
+            self.delete(id_cccd)
+            return self.manager_customer()
 
     def check_customer(self, cccd_cus):
         print("Kiểm tra thông tin khách hàng".center(40, "="))
@@ -63,7 +74,7 @@ class CustomerService(Sqlservice):
 
     def add_new_customer(self):
         print("Thêm mới khách hàng".center(40, "="))
-        id_cccd = input("Nhập CCCD khách hàng: ")
+        id_cccd = input("Nhập CCCD khách hàng (Tối đa 12 số): ")
         name = input("Họ và tên khách hàng: ")
         phone_number = input("Số điện thoại: ")
         address = input("Địa chỉ: ")

@@ -97,4 +97,4 @@ class OderRoomService(Sqlservice):
         elif nhap == "3":
             return "back menu"
         else:
-            return "out system"
+            return "logout"

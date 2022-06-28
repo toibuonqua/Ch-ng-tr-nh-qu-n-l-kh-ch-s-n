@@ -34,7 +34,8 @@ class main:
             5: "Đặt phòng",
             6: "Trả phòng",
             7: "Thống kê khách hàng",
-            8: "Đăng xuất"
+            8: "Đăng xuất",
+            9: "Thoát hệ thống"
         }
         print(f"Chào {self.account.account1.name}, chúc bạn 1 ngày làm việc hiệu quả".center(40, "="))
         option = self.show_menu(list_menu)
@@ -68,7 +69,7 @@ class main:
                 return self.menu_manager()
         elif option == 5:
             print("Đặt phòng".center(40, "="))
-            id_customer = int(input("Nhập cccd khách hàng: "))
+            id_customer = int(input("Nhập cccd khách hàng (tối đa 12 số): "))
             check_cccd = self.customer.check_customer(id_customer)
             info_acc = self.account.account1
             select_room = self.room.select_room()
@@ -91,6 +92,8 @@ class main:
             pass
         elif option == 8:
             return self.logout()
+        elif option == 9:
+            return self.out_system()
         else:
             return self.menu_manager()
 
@@ -99,7 +102,8 @@ class main:
             1: "Quản lý tài khoản cá nhân",
             2: "Đặt phòng",
             3: "Trả phòng",
-            4: "Đăng xuất"
+            4: "Đăng xuất",
+            5: "Thoát hệ thống"
         }
         print(f"Chào {self.account.account1.name}, chúc bạn 1 ngày làm việc hiệu quả".center(40, "="))
         option = self.show_menu(list_menu)
@@ -130,7 +134,7 @@ class main:
         elif option == 3:
             out = self.order_room.display_check_out()
             if out == "back menu":
-                return self.menu_manager()
+                return self.menu_employee()
             elif out == "out system":
                 return self.logout()
             else:
@@ -138,8 +142,10 @@ class main:
                 return self.menu_employee()
         elif option == 4:
             return self.logout()
+        elif option == 5:
+            return self.out_system()
         else:
-            return self.menu_manager()
+            return self.menu_employee()
 
     def show_menu(self, list_menu):
         print("Chose your option".center(40, "="))
@@ -152,6 +158,10 @@ class main:
             errorsys.choice_invalid()
 
     def logout(self):
+        print("Đăng xuất".center(40, "#"))
+        return self.login()
+
+    def out_system(self):
         print("-" * 40)
         print("CẢM ƠN VÀ HẸN GẶP LẠI")
         print("-" * 40)
