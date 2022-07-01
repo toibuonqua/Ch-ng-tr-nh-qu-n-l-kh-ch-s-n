@@ -77,18 +77,22 @@ class CustomerService(Sqlservice):
     def add_new_customer(self):
         print("Thêm mới khách hàng".center(40, "="))
         id_cccd = input("Nhập CCCD khách hàng (Tối đa 12 số): ")
-        name = input("Họ và tên khách hàng: ")
-        phone_number = input("Số điện thoại: ")
-        address = input("Địa chỉ: ")
-        total_price = 0
-        self.add({
-            "id_cccd": id_cccd,
-            "name": name,
-            "phone_number": phone_number,
-            "address": address,
-            "total_price": total_price
-        })
-        return id_cccd
+        check_cccd = self.check_id(id_cccd)
+        if check_cccd is not None:
+            return self.add_new_customer()
+        else:
+            name = input("Họ và tên khách hàng: ")
+            phone_number = input("Số điện thoại: ")
+            address = input("Địa chỉ: ")
+            total_price = 0
+            self.add({
+                "id_cccd": id_cccd,
+                "name": name,
+                "phone_number": phone_number,
+                "address": address,
+                "total_price": total_price
+            })
+            return id_cccd
 
     def get_current_total_price(self, cccd):
         sql = f"select total_price from {self.table} where {self.primary_key} = %s"
@@ -109,8 +113,11 @@ class CustomerService(Sqlservice):
         for tp in list_handle:
             x_row.append(f"{tp['name']} CCCD:{tp['id_cccd']}")
             y_row.append(int(tp['total_price']))
-        plt.bar(x_row, y_row, color="blue", width=0.75)
+        y_row = list(map(int, y_row))
+        for i, v in zip(x_row, y_row):
+            plt.text(i, v, str(v), color='black', fontweight='bold')
+        plt.bar(x_row, y_row, color="blue", width=0.3)
         plt.xlabel("Khách hàng")
-        plt.ylabel("Tổng chi tiêu")
+        plt.ylabel("Tổng chi tiêu (triệu đồng)")
         plt.title("Thống kê tổng chi tiêu của tất cả các khách hàng")
         plt.show()

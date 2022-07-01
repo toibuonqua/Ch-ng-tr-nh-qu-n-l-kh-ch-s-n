@@ -6,7 +6,6 @@ from error.errors import errorsys
 
 
 class main:
-
     def __init__(self):
         self.account = AccountService()
         self.order_room = OderRoomService()
@@ -33,9 +32,10 @@ class main:
             4: "Quản lý thông tin khách hàng",
             5: "Đặt phòng",
             6: "Trả phòng",
-            7: "Các thống kê",
-            8: "Đăng xuất",
-            9: "Thoát hệ thống"
+            7: "Kiểm tra order",
+            8: "Các thống kê",
+            9: "Đăng xuất",
+            10: "Thoát hệ thống"
         }
         print(f"Chào {self.account.account1.name}, chúc bạn 1 ngày làm việc hiệu quả".center(40, "="))
         option = self.show_menu(list_menu)
@@ -88,30 +88,34 @@ class main:
             else:
                 self.room.change_status_avai(out)
                 return self.menu_manager()
-        elif option == 7:
+        elif option == 8:
             print("Thống kê".center(40, "="))
             print("1. Tổng chi tiêu của khách hàng")
-            print("2. Thu nhập theo tuần")
-            print("3. Thu nhập theo tháng")
-            print("4. Thu nhập theo năm")
-            print("5. Trở về menu")
+            print("2. Thu nhập theo tháng")
+            print("3. Thu nhập theo năm")
+            print("4. Trở về menu")
             nhap = input("Mời bạn nhập: ")
             if nhap == "1":
                 self.customer.thong_ke_total_price_of_customer()
                 return self.menu_manager()
             elif nhap == "2":
-                pass
+                self.order_room.thong_ke_for_time("month")
+                return self.menu_manager()
             elif nhap == "3":
-                pass
+                self.order_room.thong_ke_for_time("year")
+                return self.menu_manager()
             elif nhap == "4":
-                pass
-            elif nhap == "5":
                 return self.menu_manager()
             else:
                 return self.menu_manager()
-        elif option == 8:
-            return self.logout()
+        elif option == 7:
+            print("Bảng order".center(40, "="))
+            self.order_room.showtable()
+            input("Nhấn phím bất kì để về menu ...")
+            return self.menu_manager()
         elif option == 9:
+            return self.logout()
+        elif option == 10:
             return self.out_system()
         else:
             return self.menu_manager()

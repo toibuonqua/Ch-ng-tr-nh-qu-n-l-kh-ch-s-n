@@ -1,6 +1,7 @@
 from services.Sql_Service import Sqlservice
 from prettytable import PrettyTable
 from error.errors import errorsys
+import matplotlib.pyplot as plt
 
 
 class OderRoomService(Sqlservice):
@@ -108,3 +109,21 @@ class OderRoomService(Sqlservice):
             return "back menu"
         else:
             return "logout"
+
+    def thong_ke_for_time(self, time):
+        sql = f"select extract({time} from check_in) as {time}, sum(price) as price_of_{time} from {self.table} group by {time} order by {time} asc"
+        self.cursor.execute(sql)
+        result = self.cursor.fetchall()
+        row_x = list()
+        row_y = list()
+        for tp in result:
+            row_x.append(f'{time}: {tp.get(time)}')
+            row_y.append(tp.get(f'price_of_{time}'))
+        for i, v in zip(row_x, row_y):
+            plt.text(i, v, str(v), color='black', fontweight='bold')
+        row_y = list(map(int, row_y))
+        plt.bar(row_x, row_y, color="blue", width=0.3)
+        plt.xlabel(time)
+        plt.ylabel("Tổng doanh thu (triệu đồng)")
+        plt.title(f"Thống kê tổng doanh thu theo {time}")
+        plt.show()

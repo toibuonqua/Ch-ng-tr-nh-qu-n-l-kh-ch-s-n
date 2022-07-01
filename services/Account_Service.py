@@ -40,6 +40,11 @@ class AccountService(Sqlservice):
         if press == "1":
             print("Thêm tài khoản".center(40, "="))
             user = input("Nhập username: ")
+            check_user = self.find_by_info("username", user)
+            while check_user is not None:
+                print("Tên đăng nhập đã tồn tại".center(40, "#"))
+                user = input("Nhập username: ")
+                check_user = self.find_by_info("username", user)
             password = input("Nhập password: ")
             name = input("Nhập họ và tên: ")
             address = input("Nhập địa chỉ: ")
