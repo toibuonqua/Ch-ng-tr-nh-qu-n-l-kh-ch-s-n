@@ -52,10 +52,17 @@ class OderRoomService(Sqlservice):
         sql = f"select id_account, id_room, id_customer, check_in, check_out, price, od_status from {self.table} where od_status = 'check in'"
         self.cursor.execute(sql)
         result = self.cursor.fetchall()
-        my_table = PrettyTable(list(result[0].keys()))
-        for x in result:
-            my_table.add_row(list(x.values()))
-        print(my_table)
+        try:
+            my_table = PrettyTable(list(result[0].keys()))
+            for x in result:
+                my_table.add_row(list(x.values()))
+            print(my_table)
+            return "yes"
+        except Exception:
+            print("#"*40)
+            print("Hiện không có phòng nào được thuê")
+            print("#" * 40)
+            return "no"
 
     def ktra_check_out(self, id_cccd, name_room):
         sql = f"select * from {self.table} where id_room = %s and id_customer = %s and od_status = 'check in'"
@@ -68,19 +75,22 @@ class OderRoomService(Sqlservice):
 
     def check_out_order(self):
         print("Trả phòng".center(40, "="))
-        self.show_order()
-        id_cccd = input("Nhập CCCD khách hàng: ")
-        name_room = input("Nhập phòng: ")
-        result = self.ktra_check_out(id_cccd, name_room)
-        if result is None:
-            errorsys.order_invalid()
+        rs = self.show_order()
+        if rs == "no":
             return self.display_check_out()
-        else:
-            sql = f"update {self.table} set od_status = 'check out' where {self.primary_key} = %s"
-            self.cursor.execute(sql, (result.get("id"),))
-            self.connect.commit()
-            print("Check out thành công".center(40, "~"))
-            return name_room
+        elif rs == "yes":
+            id_cccd = input("Nhập CCCD khách hàng: ")
+            name_room = input("Nhập phòng: ")
+            result = self.ktra_check_out(id_cccd, name_room)
+            if result is None:
+                errorsys.order_invalid()
+                return self.display_check_out()
+            else:
+                sql = f"update {self.table} set od_status = 'check out' where {self.primary_key} = %s"
+                self.cursor.execute(sql, (result.get("id"),))
+                self.connect.commit()
+                print("Check out thành công".center(40, "~"))
+                return name_room
 
     def display_check_out(self):
         print("Khách hàng trả phòng".center(40, "="))

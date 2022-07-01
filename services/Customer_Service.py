@@ -1,5 +1,6 @@
 from services.Sql_Service import Sqlservice
 from error.errors import errorsys
+import matplotlib.pyplot as plt
 
 
 class CustomerService(Sqlservice):
@@ -24,6 +25,7 @@ class CustomerService(Sqlservice):
         elif nhap == "3":
             return self.delete_customer()
         elif nhap == "4":
+            print("Danh sách khách hàng".center(40, "="))
             self.showtable()
             return self.manager_customer()
         elif nhap == "5":
@@ -99,3 +101,16 @@ class CustomerService(Sqlservice):
         sql = f"update {self.table} set total_price = %s where {self.primary_key} = %s"
         self.cursor.execute(sql, (total_price, cccd))
         self.connect.commit()
+
+    def thong_ke_total_price_of_customer(self):
+        list_handle = self.take_column_in_sql(["id_cccd", "name", "total_price"])
+        x_row = []
+        y_row = []
+        for tp in list_handle:
+            x_row.append(f"{tp['name']} CCCD:{tp['id_cccd']}")
+            y_row.append(int(tp['total_price']))
+        plt.bar(x_row, y_row, color="blue", width=0.75)
+        plt.xlabel("Khách hàng")
+        plt.ylabel("Tổng chi tiêu")
+        plt.title("Thống kê tổng chi tiêu của tất cả các khách hàng")
+        plt.show()

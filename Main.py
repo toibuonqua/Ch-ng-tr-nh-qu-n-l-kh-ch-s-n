@@ -33,7 +33,7 @@ class main:
             4: "Quản lý thông tin khách hàng",
             5: "Đặt phòng",
             6: "Trả phòng",
-            7: "Thống kê khách hàng",
+            7: "Các thống kê",
             8: "Đăng xuất",
             9: "Thoát hệ thống"
         }
@@ -89,7 +89,26 @@ class main:
                 self.room.change_status_avai(out)
                 return self.menu_manager()
         elif option == 7:
-            pass
+            print("Thống kê".center(40, "="))
+            print("1. Tổng chi tiêu của khách hàng")
+            print("2. Thu nhập theo tuần")
+            print("3. Thu nhập theo tháng")
+            print("4. Thu nhập theo năm")
+            print("5. Trở về menu")
+            nhap = input("Mời bạn nhập: ")
+            if nhap == "1":
+                self.customer.thong_ke_total_price_of_customer()
+                return self.menu_manager()
+            elif nhap == "2":
+                pass
+            elif nhap == "3":
+                pass
+            elif nhap == "4":
+                pass
+            elif nhap == "5":
+                return self.menu_manager()
+            else:
+                return self.menu_manager()
         elif option == 8:
             return self.logout()
         elif option == 9:

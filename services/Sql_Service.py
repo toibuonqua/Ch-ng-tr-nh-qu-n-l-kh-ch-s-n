@@ -56,6 +56,13 @@ class Sqlservice:
         except Exception:
             return None
 
+    def take_column_in_sql(self, list_col):
+        str_col = ", ".join(list_col)
+        sql = f"select {str_col} from {self.table}"
+        self.cursor.execute(sql)
+        result = self.cursor.fetchall()
+        return result
+
     def check_id(self, id):
         sql = f"select * from {self.table} where {self.primary_key} = %s"
         self.cursor.execute(sql, (id,))

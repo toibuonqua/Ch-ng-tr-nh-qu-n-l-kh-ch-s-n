@@ -79,10 +79,17 @@ class RoomService(Sqlservice):
         sql = f"select * from {self.table} where room_status = 'avai'"
         self.cursor.execute(sql)
         result = self.cursor.fetchall()
-        my_table = PrettyTable(list(result[0].keys()))
-        for x in result:
-            my_table.add_row(list(x.values()))
-        print(my_table)
+        try:
+            my_table = PrettyTable(list(result[0].keys()))
+            for x in result:
+                my_table.add_row(list(x.values()))
+            print(my_table)
+        except Exception:
+            print("#" * 40)
+            print("Hiện đang không có phòng nào sẵn dùng")
+            print("#" * 40)
+            input("Ấn để tiếp tục...")
+            return "back menu"
         select_room = input("Phòng muốn đặt: ")
         check_room = self.check_id(select_room)
         if check_room == select_room:
